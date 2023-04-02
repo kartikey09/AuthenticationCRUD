@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
-const passwordUtils = require("../lib/passwordUtils");
+const genPassword = require("../lib/passwordUtils").genPassword;
 const connection = require("../config/database");
 const User = connection.models.User;
 
@@ -9,10 +9,21 @@ const User = connection.models.User;
  */
 
 // TODO
-router.post("/login", (req, res, next) => {});
+router.post("/login", passport.authenticate('local', {failureRedirect: '/login-failure', successRedirect: '/login-success'})); 
 
 // TODO
-router.post("/register", (req, res, next) => {});
+router.post("/register", (req, res, next) => {
+  const saltHash = genPassword(req.body.password);
+  const newUser = new User({
+    username: req.body.username,
+    hash: saltHash.hash,
+    salt: saltHash.salt
+  });
+  newUser.save().then(()=>{
+    console.log(newUser);
+  })
+  res.redirect('/login');
+});
 
 /**
  * -------------- GET ROUTES ----------------
@@ -65,7 +76,7 @@ router.get("/protected-route", (req, res, next) => {
 
 // Visiting this route logs the user out
 router.get("/logout", (req, res, next) => {
-  req.logout();
+  req.logout(err=> next(err));
   res.redirect("/protected-route");
 });
 
