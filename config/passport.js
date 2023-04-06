@@ -13,7 +13,7 @@ const validatePassword = require('../lib/passwordUtils').validatePassword
  * ! similarly for password it is req.body.pw.
  */
 const customFields = {
-  username: "username",
+  username: "username", //! if the variable for username is different in the req object then specify it here so that passport can understand which filed to refer to look for username, similarly for password
   password: "password",
 };
 

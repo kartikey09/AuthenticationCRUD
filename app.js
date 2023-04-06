@@ -29,9 +29,6 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 /**
  * -------------- SESSION SETUP ----------------
  */
@@ -42,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
  * -------------- PASSPORT AUTHENTICATION ----------------
  */
 
-app.use(passport.initialize()); //! re initializes the passport middleware every time we acces a route so that if the session expires we can re initialize it
+app.use(passport.initialize()); //! re-initializes the passport middleware every time we access a route so that if the session expires we can re initialize it
 app.use(passport.session()); //! to use serialize and deserialize user we have to use this middleware so that passport can alter req object.
 //!                              passport.session() acts as a middleware to alter the req object and change the 'user' value that is currently the session id
 //!                              (from the client cookie) into the true deserialized user object. Another way to understand this is that if we allow passport 
